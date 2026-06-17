@@ -6,7 +6,6 @@
 [![Uses LocalStorage](https://img.shields.io/badge/Uses-LocalStorage-4A90D9?style=for-the-badge)](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
 [![Responsive Design](https://img.shields.io/badge/Responsive-Design-28A745?style=for-the-badge)](https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Responsive_Design)
 [![Dark Mode](https://img.shields.io/badge/Dark-Mode-1A1A2E?style=for-the-badge)](https://developer.mozilla.org/en-US/docs/Web/CSS/color-scheme)
-[![MIT License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
 ---
 
