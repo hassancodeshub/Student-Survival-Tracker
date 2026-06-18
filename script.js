@@ -66,7 +66,32 @@ const App = {
         this.saveData();
     }
     
-    // [FUTURE JS METHODS GO HERE]
+    ,
+    // --- TRANSACTIONS CRUD ---
+    addTransaction(data) {
+        const transaction = { id: Date.now(), ...data, createdAt: new Date().toISOString() };
+        this.transactions.unshift(transaction);
+        this.saveData();
+        this.render();
+    },
+    
+    deleteTransaction(id) {
+        if (!confirm('Are you sure you want to delete this?')) return;
+        this.transactions = this.transactions.filter(t => t.id !== id);
+        this.saveData();
+        this.render();
+    },
+    
+    getTransaction(id) {
+        return this.transactions.find(t => t.id === id);
+    },
+
+    getStats(transactions) {
+        const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+        const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+        return { totalIncome, totalExpenses, netBalance: totalIncome - totalExpenses };
+    },
+
 };
 
 // boot it up
