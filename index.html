@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Expense Tracker</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div id="app">
-        
+
         <header class="header">
             <div class="header-left">
                 <h1>Expense Tracker</h1>
@@ -108,24 +110,7 @@
                     <button type="submit" class="btn btn-primary">Add Transaction</button>
                 </form>
             </section>
-            
-            <section class="transactions-section">
-                <div class="section-header">
-                    <h2>All Transactions</h2>
-                    <div class="filter-controls">
-                        <input type="text" id="searchInput" placeholder="Search transactions..." class="search-input">
-                        <select id="filterType" class="filter-select">
-                            <option value="all">All Types</option>
-                            <option value="income">Income</option>
-                            <option value="expense">Expense</option>
-                        </select>
-                        <select id="filterCategory" class="filter-select">
-                            <option value="all">All Categories</option>
-                        </select>
-                    </div>
-                </div>
-                <div id="transactionList" class="transaction-list"></div>
-            </section>
+
             <section class="analytics-section">
                 <h2>Spending Analytics</h2>
                 <div class="analytics-grid">
@@ -134,7 +119,7 @@
                         <div id="categoryChart" class="chart-container"></div>
                     </div>
                     <div class="chart-card">
-                        <h3>Monthly Trends (Last 6 Months)</h3>
+                        <h3>Monthly Trends</h3>
                         <div id="trendChart" class="chart-container"></div>
                     </div>
                 </div>
@@ -155,10 +140,65 @@
                 </div>
                 <div id="goalList" class="goal-grid"></div>
             </section>
-            </main>
-            
+
+            <section class="transactions-section">
+                <div class="section-header">
+                    <h2>All Transactions</h2>
+                    <div class="filter-controls">
+                        <input type="text" id="searchInput" placeholder="Search transactions..." class="search-input">
+                        <select id="filterType" class="filter-select">
+                            <option value="all">All Types</option>
+                            <option value="income">Income</option>
+                            <option value="expense">Expense</option>
+                        </select>
+                        <select id="filterCategory" class="filter-select">
+                            <option value="all">All Categories</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="transactionList" class="transaction-list"></div>
+            </section>
+        </main>
+        
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <span class="modal-close">&times;</span>
+                <h2>Edit Transaction</h2>
+                <form id="editForm">
+                    <input type="hidden" id="editId">
+                    <div class="form-group"><label>Type</label><select id="editType"><option value="expense">Expense</option><option value="income">Income</option></select></div>
+                    <div class="form-group"><label>Category</label><input type="text" id="editCategory" readonly></div>
+                    <div class="form-group"><label>Amount</label><input type="number" id="editAmount" step="0.01"></div>
+                    <div class="form-group"><label>Date</label><input type="date" id="editDate"></div>
+                    <div class="form-group"><label>Description</label><input type="text" id="editDescription"></div>
+                    <div class="form-group"><label>Notes</label><textarea id="editNotes"></textarea></div>
+                    <button type="submit" class="btn btn-primary" style="margin-top: 15px;">Update</button>
+                </form>
+            </div>
         </div>
-    
+        <div id="budgetModal" class="modal">
+            <div class="modal-content">
+                <span class="modal-close">&times;</span><h2>Set Budget</h2>
+                <form id="budgetForm">
+                    <div class="form-group"><label>Category</label><select id="budgetCategory" required></select></div>
+                    <div class="form-group"><label>Monthly Budget (₹)</label><input type="number" id="budgetAmount" required min="0"></div>
+                    <button type="submit" class="btn btn-primary" style="margin-top: 15px;">Save Budget</button>
+                </form>
+            </div>
+        </div>
+        <div id="goalModal" class="modal">
+            <div class="modal-content">
+                <span class="modal-close">&times;</span><h2>Add Goal</h2>
+                <form id="goalForm">
+                    <div class="form-group"><label>Goal Name</label><input type="text" id="goalName" required></div>
+                    <div class="form-group"><label>Target Amount (₹)</label><input type="number" id="goalTarget" required min="0"></div>
+                    <button type="submit" class="btn btn-primary" style="margin-top: 15px;">Create</button>
+                </form>
+            </div>
+        </div>
+    </div>
+<div id="toastContainer" class="toast-container"></div>
     <script src="script.js"></script>
 </body>
+
 </html>
