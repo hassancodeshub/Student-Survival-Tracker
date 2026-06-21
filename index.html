@@ -201,5 +201,142 @@
                         </div>
                     </div>
                 </section>
-   </body>
-   </html>
+
+                <section class="view" id="view-insights">
+                    <h2>Smart Insights</h2>
+                    <div class="insights-list" id="insights-container"></div>
+                </section>
+
+                <section class="view" id="view-settings">
+                    <h2>Settings</h2>
+                    <div class="card settings-card">
+                        <form id="settings-form">
+                            <div class="form-group">
+                                <label>Student Name</label>
+                                <input type="text" id="set-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Currency Symbol</label>
+                                <input type="text" id="set-currency" maxlength="5" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Update PIN (Optional)</label>
+                                <input type="password" id="set-pin" pattern="[0-9]{4}" maxlength="4" placeholder="Leave blank to keep current">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Settings</button>
+                        </form>
+                        <hr class="divider">
+                        <div class="data-management">
+                            <h3>Data Management</h3>
+                            <div class="button-group">
+                                <button class="btn btn-secondary" id="btn-export">Export Backup</button>
+                                <button class="btn btn-secondary" id="btn-trigger-import">Import Backup</button>
+                                <button class="btn btn-danger" id="btn-reset">Reset Application</button>
+                                <input type="file" id="file-import" accept=".json" class="hidden">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="expense-modal">
+        <div class="modal-card" role="dialog" aria-modal="true">
+            <div class="modal-header">
+                <h3>Add Expense</h3>
+                <button class="close-modal" aria-label="Close">&times;</button>
+            </div>
+            <form id="expense-form">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" id="exp-title" maxlength="50" required>
+                </div>
+                <div class="form-group">
+                    <label>Amount</label>
+                    <input type="number" id="exp-amount" step="0.01" min="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="exp-category" required>
+                        <option value="Food">Food</option>
+                        <option value="Transport">Transport</option>
+                        <option value="Education">Education</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Shopping">Shopping</option>
+                        <option value="Health">Health</option>
+                        <option value="Bills">Bills</option>
+                        <option value="Emergency">Emergency</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" id="exp-date" required>
+                </div>
+                <div class="form-group">
+                    <label>Notes (Optional)</label>
+                    <textarea id="exp-notes" rows="2" maxlength="100"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Save Expense</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="funds-modal">
+        <div class="modal-card" role="dialog" aria-modal="true">
+            <div class="modal-header">
+                <h3>Add Income / Funds</h3>
+                <button class="close-modal" aria-label="Close">&times;</button>
+            </div>
+            <form id="funds-form">
+                <div class="form-group">
+                    <label>Source (e.g. Pocket Money, Job)</label>
+                    <input type="text" id="fund-title" maxlength="50" required>
+                </div>
+                <div class="form-group">
+                    <label>Amount</label>
+                    <input type="number" id="fund-amount" step="0.01" min="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" id="fund-date" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100" style="background-color: var(--success);">Add Funds</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="goal-modal">
+        <div class="modal-card" role="dialog" aria-modal="true">
+            <div class="modal-header">
+                <h3>Add Savings Goal</h3>
+                <button class="close-modal" aria-label="Close">&times;</button>
+            </div>
+            <form id="goal-form">
+                <div class="form-group">
+                    <label>Goal Name</label>
+                    <input type="text" id="goal-name" maxlength="40" required>
+                </div>
+                <div class="form-group">
+                    <label>Target Amount</label>
+                    <input type="number" id="goal-target" step="0.01" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label>Current Saved</label>
+                    <input type="number" id="goal-current" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label>Deadline</label>
+                    <input type="date" id="goal-deadline" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Save Goal</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+    <script src="app.js"></script>
+</body>
+</html>
+   
