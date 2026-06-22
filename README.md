@@ -2,7 +2,7 @@
 
 «Helping students manage their money smarter, one expense at a time.»
 
-"🚀 Live Demo" (https://spendwisebyhg.netlify.app/) • "📂 Source Code" (https://github.com/hassancodeshub/SpendWise)
+🚀 **[Live Demo](https://spendwisebyhg.netlify.app)** • 📂 **[Source Code](https://github.com/hassancodeshub/SpendWise)**
 
 SpendWise is a smart expense management web application built specifically for college students...
 
