@@ -343,6 +343,23 @@
         </div>
     </div>
 
+     <div class="modal-overlay" id="fund-goal-modal">
+        <div class="modal-card" role="dialog" aria-modal="true">
+            <div class="modal-header">
+                <h3>Add Funds to Goal</h3>
+                <button class="close-modal" aria-label="Close">&times;</button>
+            </div>
+            <form id="fund-goal-form">
+                <input type="hidden" id="fg-id">
+                <div class="form-group">
+                    <label>Amount to Add</label>
+                    <input type="number" id="fg-amount" step="0.01" min="0.01" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Add to Savings</button>
+            </form>
+        </div>
+    </div>
+
     <div id="toast-container" class="toast-container" aria-live="polite"></div>
     <script src="script.js"></script>
 </body>

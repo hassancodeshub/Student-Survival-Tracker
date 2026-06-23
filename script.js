@@ -210,7 +210,7 @@ window.killRow = function(id) {
 function buildGoalsUI() {
     var gl = document.getElementById('goals-list');
     if(!db_state.gls || db_state.gls.length==0) { gl.innerHTML = '<p class="empty-state-small">No goals.</p>'; return; }
-    
+   
     var html = '';
     for(var i=0; i<db_state.gls.length; i++) {
         var g = db_state.gls[i];
@@ -218,7 +218,21 @@ function buildGoalsUI() {
         var dp = g.deadline.split('-');
         var dl = Math.ceil((new Date(dp[0], dp[1]-1, dp[2]) - new Date()) / 86400000);
         var timeStr = dl < 0 ? "Past deadline" : (dl === 0 ? "Due today" : `${dl} days left`);
-        
+       
+        // Calculate Required Daily Savings
+        var remaining = g.target - g.current;
+        var dailyStr = "";
+        if (remaining > 0) {
+            var safe_dl = dl > 0 ? dl : 1; // Prevent dividing by zero if deadline is today/past
+            var reqDaily = remaining / safe_dl;
+            dailyStr = `Need: ${db_state.prof.curr}${reqDaily.toFixed(2)} / day`;
+        } else {
+            dailyStr = `<strong class="text-success">Goal Achieved!</strong>`;
+        }
+
+        // Only show Add Funds button if the goal isn't finished
+        var addBtnHtml = remaining > 0 ? `<button class="btn btn-secondary w-100" style="margin-top: 12px; padding: 8px; font-size: 0.9rem;" onclick="openFundGoal('${g.id}')">+ Add Funds</button>` : '';
+
         html += `<div class="card goal-card">
             <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                 <h3>${g.name.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</h3>
@@ -227,6 +241,8 @@ function buildGoalsUI() {
             <div class="goal-meta">Target: ${db_state.prof.curr}${g.target.toFixed(2)}</div>
             <div class="progress-bar-container"><div class="progress-bar" style="width:${p}%; background-color:var(--emerald);"></div></div>
             <div class="goal-stats"><span>Saved: ${db_state.prof.curr}${g.current.toFixed(2)}</span><span>${timeStr}</span></div>
+            <div class="goal-stats" style="color: var(--text-muted); margin-top: 4px;">${dailyStr}</div>
+            ${addBtnHtml}
         </div>`;
     }
     gl.innerHTML = html;
@@ -238,6 +254,13 @@ window.killGoal = function(id) {
         localStorage.setItem(ST_KEY, JSON.stringify(db_state));
         buildGoalsUI();
     }
+};
+
+// Opens the new Add Funds modal
+window.openFundGoal = function(id) {
+    document.getElementById('fund-goal-form').reset();
+    document.getElementById('fg-id').value = id;
+    document.getElementById('fund-goal-modal').classList.add('active');
 };
 
 function buildInsights() {
@@ -460,6 +483,38 @@ function setupAllTheEvents() {
         });
         localStorage.setItem(ST_KEY, JSON.stringify(db_state));
         document.getElementById('goal-modal').classList.remove('active');
+        buildGoalsUI();
+    };
+
+     // Handles adding funds to an existing goal
+    document.getElementById('fund-goal-form').onsubmit = function(e) {
+        e.preventDefault();
+        var id = document.getElementById('fg-id').value;
+        var amt = parseFloat(document.getElementById('fg-amount').value);
+       
+        var goalIndex = db_state.gls.findIndex(g => g.id === id);
+        if(goalIndex === -1) return showMsg("Goal not found", "error");
+       
+        var goal = db_state.gls[goalIndex];
+        var remaining = goal.target - goal.current;
+       
+        // Strict Validation: Prevent overfunding
+        if (amt > remaining) {
+            return showMsg(`Too high! You only need to add ${db_state.prof.curr}${remaining.toFixed(2)} to achieve this goal.`, "warning");
+        }
+       
+        // Add the funds and save
+        db_state.gls[goalIndex].current += amt;
+        localStorage.setItem(ST_KEY, JSON.stringify(db_state));
+        document.getElementById('fund-goal-modal').classList.remove('active');
+       
+        // Custom message if they just hit 100%
+        if (amt === remaining) {
+            showMsg("Congratulations! Goal Achieved!", "success");
+        } else {
+            showMsg("Funds added to goal!", "success");
+        }
+       
         buildGoalsUI();
     };
 
