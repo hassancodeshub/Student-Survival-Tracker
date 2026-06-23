@@ -214,16 +214,29 @@ function buildGoalsUI() {
     var html = '';
     for(var i=0; i<db_state.gls.length; i++) {
         var g = db_state.gls[i];
-        var p = Math.min((g.current/g.target)*100, 100).toFixed(1);
+       
+        // Safely parse amounts to prevent string math bugs
+        var targetAmt = parseFloat(g.target);
+        var currentAmt = parseFloat(g.current);
+        var p = Math.min((currentAmt / targetAmt) * 100, 100).toFixed(1);
+       
+        // FIXED DATE MATH: Strip time components for perfect whole-day accuracy
         var dp = g.deadline.split('-');
-        var dl = Math.ceil((new Date(dp[0], dp[1]-1, dp[2]) - new Date()) / 86400000);
+        var deadlineDate = new Date(dp[0], dp[1]-1, dp[2]);
+       
+        var today = new Date();
+        today.setHours(0, 0, 0, 0); // Reset today to exactly midnight
+       
+        var dl = Math.round((deadlineDate - today) / 86400000);
         var timeStr = dl < 0 ? "Past deadline" : (dl === 0 ? "Due today" : `${dl} days left`);
        
         // Calculate Required Daily Savings
-        var remaining = g.target - g.current;
+        var remaining = targetAmt - currentAmt;
         var dailyStr = "";
+       
         if (remaining > 0) {
-            var safe_dl = dl > 0 ? dl : 1; // Prevent dividing by zero if deadline is today/past
+            // If deadline is today or past, divide by 1 to show the total remaining amount needed today
+            var safe_dl = dl > 0 ? dl : 1;
             var reqDaily = remaining / safe_dl;
             dailyStr = `Need: ${db_state.prof.curr}${reqDaily.toFixed(2)} / day`;
         } else {
@@ -238,9 +251,9 @@ function buildGoalsUI() {
                 <h3>${g.name.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</h3>
                 <button class="btn btn-text text-danger" style="font-size:0.8rem" onclick="killGoal('${g.id}')">Drop</button>
             </div>
-            <div class="goal-meta">Target: ${db_state.prof.curr}${g.target.toFixed(2)}</div>
+            <div class="goal-meta">Target: ${db_state.prof.curr}${targetAmt.toFixed(2)}</div>
             <div class="progress-bar-container"><div class="progress-bar" style="width:${p}%; background-color:var(--emerald);"></div></div>
-            <div class="goal-stats"><span>Saved: ${db_state.prof.curr}${g.current.toFixed(2)}</span><span>${timeStr}</span></div>
+            <div class="goal-stats"><span>Saved: ${db_state.prof.curr}${currentAmt.toFixed(2)}</span><span>${timeStr}</span></div>
             <div class="goal-stats" style="color: var(--text-muted); margin-top: 4px;">${dailyStr}</div>
             ${addBtnHtml}
         </div>`;
